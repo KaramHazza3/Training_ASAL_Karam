@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>html_element API documentation</title>
+<meta name="description" content="This module contains the definition of the HTMLElement class
+and related functionality for handling HTML elements." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>html_element</code></h1>
+</header>
+<section id="section-intro">
+<p>This module contains the definition of the HTMLElement class
+and related functionality for handling HTML elements.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This module contains the definition of the HTMLElement class
+ and related functionality for handling HTML elements.
+&#34;&#34;&#34;
+from typing import Union, List, Dict, Iterable
+
+class HTMLElement:
+    &#34;&#34;&#34;
+    Represents an HTML element with a name, value, and attributes.
+    This class provides functionality for creating and manipulating HTML elements.
+    &#34;&#34;&#34;
+    unique_ids: set[int] = set()
+
+    def __init__(self, name: str, value: Union[&#39;HTMLElement&#39;, str,
+                                                List[&#39;HTMLElement&#39;]], attributes: Dict[str, str]):
+        self.name: str = self.validate_name(name)
+        self.value: Union[&#39;HTMLElement&#39;, str, List[&#39;HTMLElement&#39;]] = self.validate_value(value)
+        self.attributes: Dict[str, str] = self.validate_attributes(attributes)
+        self.children: List[&#39;HTMLElement&#39;] = []
+
+        if &#34;id&#34; in self.attributes:
+            HTMLElement.unique_ids.add(self.attributes[&#34;id&#34;])
+
+    @staticmethod
+    def validate_name(name: str) -&gt; str:
+        &#34;&#34;&#34;
+    Validates the given HTML element name.
+
+    Args:
+        name (str): The name of the HTML element to validate.
+
+    Returns:
+        str: The validated HTML element name.
+
+    Raises:
+        InvalidElementName: If the name is not a valid HTML element name.
+    &#34;&#34;&#34;
+        valid_tags: List[str] = [&#34;div&#34;, &#34;p&#34;, &#34;span&#34;, &#34;h1&#34;, &#34;h2&#34;, &#34;h3&#34;, &#34;h4&#34;, &#34;h5&#34;]
+        if name.lower() not in valid_tags:
+            raise InvalidElementName(f&#34;Invalid HTML element name: {name}&#34;)
+        return name.lower()
+    @staticmethod
+    def validate_value(value: Union[&#39;HTMLElement&#39;,
+                                     Iterable]
+                                     ) -&gt; Union[&#39;HTMLElement&#39;, Iterable]:
+        &#34;&#34;&#34;
+    Validates the given HTML element value.
+
+    Args:
+        value (Union[&#39;HTMLElement&#39;Iterable]): The value to validate.
+
+    Returns:
+        Union[&#39;HTMLElement&#39;Iterable]: The validated value.
+
+    Raises:
+        TypeError: If the value is not of the correct type.
+    &#34;&#34;&#34;
+        if not isinstance(value, (HTMLElement,Iterable)):
+            raise TypeError(&#34;Invalid value type&#34;)
+        if isinstance(value,str):
+            return value
+        if isinstance(value,Iterable):
+            for item in value:
+                if not isinstance(item, HTMLElement):
+                    raise TypeError(&#34;Invalid value type in the list. Must be HTML element.&#34;)
+        return value
+    @staticmethod
+    def validate_attributes(attributes: Dict[str, str]) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;
+    Validates the given HTML element attributes.
+
+    Args:
+        attributes (Dict[str, str]): The attributes to validate.
+
+    Returns:
+        Dict[str, str]: The validated attributes.
+
+    Raises:
+        TypeError: If the attributes are not of the correct type.
+    &#34;&#34;&#34;
+        if not isinstance(attributes, dict):
+            raise TypeError(&#34;attributes must be a dictionary&#34;)
+        if not HTMLElement.is_id_duplication(attributes):
+            return attributes
+        return attributes
+    @staticmethod
+    def is_id_duplication(attributes: Dict[str,str], children: List[&#39;HTMLElement&#39;]=None) -&gt; bool:
+        &#34;&#34;&#34;
+    Checks for duplication of the &#39;id&#39; attribute among HTML element instances and children.
+
+    Args:
+        attributes (Dict[str, str]): The attributes of the HTML element to check.
+        children (List[&#39;HTMLElement&#39;], optional): The list of children HTML
+        elements to check. Default is None.
+
+    Returns:
+        bool: True if the &#39;id&#39; attribute is duplicated, False otherwise.
+
+    Raises:
+        DuplicateIDError: If the &#39;id&#39; attribute is found to be duplicated.
+    &#34;&#34;&#34;
+        existing_id = attributes[&#34;id&#34;]
+        if existing_id in HTMLElement.unique_ids:
+            raise DuplicateIDError(f&#34;ID &#39;{existing_id}&#39; is already exists&#34;)
+        if children:
+            for child in children:
+                if child.attributes.get(&#34;id&#34;) in HTMLElement.unique_ids:
+                    raise DuplicateIDError(f&#34;ID &#39;{existing_id}&#39; is already exists&#34;)
+        return False
+    @classmethod
+    def append(cls, element: &#39;HTMLElement&#39;, element2: &#39;HTMLElement&#39;)-&gt;None:
+        &#34;&#34;&#34;
+    Appends an HTML element as a child to another HTML element.
+
+    Args:
+        cls: The class itself (HTMLElement).
+        element (&#39;HTMLElement&#39;): The parent HTML element to which
+        the child element will be appended.
+        element2 (&#39;HTMLElement&#39;): The child HTML element to append.
+
+    Returns:
+        bool: True if the child element was successfully appended, False otherwise.
+    &#34;&#34;&#34;
+        if not element.children:
+            element.children.append(element2)
+            return
+        if not HTMLElement.is_id_duplication(element.attributes, element.children):
+            element.children.append(element2)
+    @classmethod
+    def render(cls, element: &#39;HTMLElement&#39;, indent_level: int=0) -&gt; str:
+        &#34;&#34;&#34;
+    Renders the HTML representation of the given HTML element and its children.
+
+    Args:
+        cls: The class itself (HTMLElement).
+        element (&#39;HTMLElement&#39;): The HTML element to render.
+        indent_level (int): The indentation level for formatting the output.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+        result: str = &#34;&#34;
+        indent = &#39;\t&#39; * indent_level
+        opening_tag = f&#39;&lt;{element.name}&#39;
+        for key, value in element.attributes.items():
+            opening_tag += f&#39; {key}=&#34;{value}&#34;&#39;
+        opening_tag += &#39;&gt;\n&#39;
+        result+=f&#39;{indent}{opening_tag}\t\t{element.value}\n&#39;
+        if element.children:
+            for child in element.children:
+                result+=cls.render(child, indent_level + 1)
+        closing_tag = f&#39;{indent}&lt;/{element.name}&gt;&#39;
+        result+=closing_tag + &#39;\n&#39;
+        return result
+    @classmethod
+    def find_elements_by_attr(cls,element: &#39;HTMLElement&#39;,
+                               attr: str,attr_value: str
+                               ) -&gt; List[&#39;HTMLElement&#39;]:
+        &#34;&#34;&#34;
+    Finds HTML elements with the specified attribute and value.
+
+    Args:
+        element (&#39;HTMLElement&#39;): The HTML element to start the search from.
+        attr (str): The attribute to search for.
+        attr_value (str): The value of the attribute to search for.
+
+    Returns:
+        List[&#39;HTMLElement&#39;]: A list of HTML elements with the specified attribute and value.
+    &#34;&#34;&#34;
+        elements: List[&#39;HTMLElement&#39;] = []
+        for key, value in element.attributes.items():
+            if key == attr and attr_value == value:
+                elements.append(element)
+        if element.children:
+            for child in element.children:
+                elements.extend(child.find_elements_by_attr(child, attr, attr_value))
+        return elements
+    @classmethod
+    def find_elements_by_tag(cls,element: &#39;HTMLElement&#39;, tag_name: str) -&gt; List[&#39;HTMLElement&#39;]:
+        &#34;&#34;&#34;
+    Finds HTML elements with the specified tag name starting from the given element.
+
+    Args:
+        element (&#39;HTMLElement&#39;): The HTML element to start the search from.
+        tag_name (str): The tag name to search for.
+
+    Returns:
+        List[&#39;HTMLElement&#39;]: A list of HTML elements with the specified tag name.
+    &#34;&#34;&#34;
+        elements: List[&#39;HTMLElement&#39;] = []
+        if HTMLElement.validate_name(tag_name) and element.name == tag_name:
+            elements.append(element)
+        if element.children:
+            for child in element.children:
+                elements.extend(child.find_elements_by_tag(child, tag_name))
+        return elements
+    @classmethod
+    def render_to_html_file(cls, element: &#39;HTMLElement&#39;) -&gt; None:
+        &#34;&#34;&#34;
+    Renders the given HTML element and its children to an HTML file.
+
+    Args:
+        element (&#39;HTMLElement&#39;): The root HTML element to render.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+        with open(&#34;output.html&#34;, &#39;w&#39;,encoding=&#39;utf-8&#39;) as html_file:
+            html_file.write(&#34;&lt;!DOCTYPE html&gt;\n&#34;)
+            html_file.write(cls.render(element))
+class InvalidElementName(Exception):
+    &#34;&#34;&#34;
+    Exception raised when an invalid HTML element name is encountered.
+    &#34;&#34;&#34;
+
+class DuplicateIDError(Exception):
+    &#34;&#34;&#34;
+    Exception raised when a duplicate ID attribute is encountered among HTML elements.
+    &#34;&#34;&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="html_element.DuplicateIDError"><code class="flex name class">
+<span>class <span class="ident">DuplicateIDError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised when a duplicate ID attribute is encountered among HTML elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DuplicateIDError(Exception):
+    &#34;&#34;&#34;
+    Exception raised when a duplicate ID attribute is encountered among HTML elements.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="html_element.HTMLElement"><code class="flex name class">
+<span>class <span class="ident">HTMLElement</span></span>
+<span>(</span><span>name: str, value: Union[ForwardRef('<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>'), str, List[ForwardRef('<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>')]], attributes: Dict[str, str])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Represents an HTML element with a name, value, and attributes.
+This class provides functionality for creating and manipulating HTML elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HTMLElement:
+    &#34;&#34;&#34;
+    Represents an HTML element with a name, value, and attributes.
+    This class provides functionality for creating and manipulating HTML elements.
+    &#34;&#34;&#34;
+    unique_ids: set[int] = set()
+
+    def __init__(self, name: str, value: Union[&#39;HTMLElement&#39;, str,
+                                                List[&#39;HTMLElement&#39;]], attributes: Dict[str, str]):
+        self.name: str = self.validate_name(name)
+        self.value: Union[&#39;HTMLElement&#39;, str, List[&#39;HTMLElement&#39;]] = self.validate_value(value)
+        self.attributes: Dict[str, str] = self.validate_attributes(attributes)
+        self.children: List[&#39;HTMLElement&#39;] = []
+
+        if &#34;id&#34; in self.attributes:
+            HTMLElement.unique_ids.add(self.attributes[&#34;id&#34;])
+
+    @staticmethod
+    def validate_name(name: str) -&gt; str:
+        &#34;&#34;&#34;
+    Validates the given HTML element name.
+
+    Args:
+        name (str): The name of the HTML element to validate.
+
+    Returns:
+        str: The validated HTML element name.
+
+    Raises:
+        InvalidElementName: If the name is not a valid HTML element name.
+    &#34;&#34;&#34;
+        valid_tags: List[str] = [&#34;div&#34;, &#34;p&#34;, &#34;span&#34;, &#34;h1&#34;, &#34;h2&#34;, &#34;h3&#34;, &#34;h4&#34;, &#34;h5&#34;]
+        if name.lower() not in valid_tags:
+            raise InvalidElementName(f&#34;Invalid HTML element name: {name}&#34;)
+        return name.lower()
+    @staticmethod
+    def validate_value(value: Union[&#39;HTMLElement&#39;,
+                                     Iterable]
+                                     ) -&gt; Union[&#39;HTMLElement&#39;, Iterable]:
+        &#34;&#34;&#34;
+    Validates the given HTML element value.
+
+    Args:
+        value (Union[&#39;HTMLElement&#39;Iterable]): The value to validate.
+
+    Returns:
+        Union[&#39;HTMLElement&#39;Iterable]: The validated value.
+
+    Raises:
+        TypeError: If the value is not of the correct type.
+    &#34;&#34;&#34;
+        if not isinstance(value, (HTMLElement,Iterable)):
+            raise TypeError(&#34;Invalid value type&#34;)
+        if isinstance(value,str):
+            return value
+        if isinstance(value,Iterable):
+            for item in value:
+                if not isinstance(item, HTMLElement):
+                    raise TypeError(&#34;Invalid value type in the list. Must be HTML element.&#34;)
+        return value
+    @staticmethod
+    def validate_attributes(attributes: Dict[str, str]) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;
+    Validates the given HTML element attributes.
+
+    Args:
+        attributes (Dict[str, str]): The attributes to validate.
+
+    Returns:
+        Dict[str, str]: The validated attributes.
+
+    Raises:
+        TypeError: If the attributes are not of the correct type.
+    &#34;&#34;&#34;
+        if not isinstance(attributes, dict):
+            raise TypeError(&#34;attributes must be a dictionary&#34;)
+        if not HTMLElement.is_id_duplication(attributes):
+            return attributes
+        return attributes
+    @staticmethod
+    def is_id_duplication(attributes: Dict[str,str], children: List[&#39;HTMLElement&#39;]=None) -&gt; bool:
+        &#34;&#34;&#34;
+    Checks for duplication of the &#39;id&#39; attribute among HTML element instances and children.
+
+    Args:
+        attributes (Dict[str, str]): The attributes of the HTML element to check.
+        children (List[&#39;HTMLElement&#39;], optional): The list of children HTML
+        elements to check. Default is None.
+
+    Returns:
+        bool: True if the &#39;id&#39; attribute is duplicated, False otherwise.
+
+    Raises:
+        DuplicateIDError: If the &#39;id&#39; attribute is found to be duplicated.
+    &#34;&#34;&#34;
+        existing_id = attributes[&#34;id&#34;]
+        if existing_id in HTMLElement.unique_ids:
+            raise DuplicateIDError(f&#34;ID &#39;{existing_id}&#39; is already exists&#34;)
+        if children:
+            for child in children:
+                if child.attributes.get(&#34;id&#34;) in HTMLElement.unique_ids:
+                    raise DuplicateIDError(f&#34;ID &#39;{existing_id}&#39; is already exists&#34;)
+        return False
+    @classmethod
+    def append(cls, element: &#39;HTMLElement&#39;, element2: &#39;HTMLElement&#39;)-&gt;None:
+        &#34;&#34;&#34;
+    Appends an HTML element as a child to another HTML element.
+
+    Args:
+        cls: The class itself (HTMLElement).
+        element (&#39;HTMLElement&#39;): The parent HTML element to which
+        the child element will be appended.
+        element2 (&#39;HTMLElement&#39;): The child HTML element to append.
+
+    Returns:
+        bool: True if the child element was successfully appended, False otherwise.
+    &#34;&#34;&#34;
+        if not element.children:
+            element.children.append(element2)
+            return
+        if not HTMLElement.is_id_duplication(element.attributes, element.children):
+            element.children.append(element2)
+    @classmethod
+    def render(cls, element: &#39;HTMLElement&#39;, indent_level: int=0) -&gt; str:
+        &#34;&#34;&#34;
+    Renders the HTML representation of the given HTML element and its children.
+
+    Args:
+        cls: The class itself (HTMLElement).
+        element (&#39;HTMLElement&#39;): The HTML element to render.
+        indent_level (int): The indentation level for formatting the output.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+        result: str = &#34;&#34;
+        indent = &#39;\t&#39; * indent_level
+        opening_tag = f&#39;&lt;{element.name}&#39;
+        for key, value in element.attributes.items():
+            opening_tag += f&#39; {key}=&#34;{value}&#34;&#39;
+        opening_tag += &#39;&gt;\n&#39;
+        result+=f&#39;{indent}{opening_tag}\t\t{element.value}\n&#39;
+        if element.children:
+            for child in element.children:
+                result+=cls.render(child, indent_level + 1)
+        closing_tag = f&#39;{indent}&lt;/{element.name}&gt;&#39;
+        result+=closing_tag + &#39;\n&#39;
+        return result
+    @classmethod
+    def find_elements_by_attr(cls,element: &#39;HTMLElement&#39;,
+                               attr: str,attr_value: str
+                               ) -&gt; List[&#39;HTMLElement&#39;]:
+        &#34;&#34;&#34;
+    Finds HTML elements with the specified attribute and value.
+
+    Args:
+        element (&#39;HTMLElement&#39;): The HTML element to start the search from.
+        attr (str): The attribute to search for.
+        attr_value (str): The value of the attribute to search for.
+
+    Returns:
+        List[&#39;HTMLElement&#39;]: A list of HTML elements with the specified attribute and value.
+    &#34;&#34;&#34;
+        elements: List[&#39;HTMLElement&#39;] = []
+        for key, value in element.attributes.items():
+            if key == attr and attr_value == value:
+                elements.append(element)
+        if element.children:
+            for child in element.children:
+                elements.extend(child.find_elements_by_attr(child, attr, attr_value))
+        return elements
+    @classmethod
+    def find_elements_by_tag(cls,element: &#39;HTMLElement&#39;, tag_name: str) -&gt; List[&#39;HTMLElement&#39;]:
+        &#34;&#34;&#34;
+    Finds HTML elements with the specified tag name starting from the given element.
+
+    Args:
+        element (&#39;HTMLElement&#39;): The HTML element to start the search from.
+        tag_name (str): The tag name to search for.
+
+    Returns:
+        List[&#39;HTMLElement&#39;]: A list of HTML elements with the specified tag name.
+    &#34;&#34;&#34;
+        elements: List[&#39;HTMLElement&#39;] = []
+        if HTMLElement.validate_name(tag_name) and element.name == tag_name:
+            elements.append(element)
+        if element.children:
+            for child in element.children:
+                elements.extend(child.find_elements_by_tag(child, tag_name))
+        return elements
+    @classmethod
+    def render_to_html_file(cls, element: &#39;HTMLElement&#39;) -&gt; None:
+        &#34;&#34;&#34;
+    Renders the given HTML element and its children to an HTML file.
+
+    Args:
+        element (&#39;HTMLElement&#39;): The root HTML element to render.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+        with open(&#34;output.html&#34;, &#39;w&#39;,encoding=&#39;utf-8&#39;) as html_file:
+            html_file.write(&#34;&lt;!DOCTYPE html&gt;\n&#34;)
+            html_file.write(cls.render(element))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="html_element.HTMLElement.unique_ids"><code class="name">var <span class="ident">unique_ids</span> : set[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="html_element.HTMLElement.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>element: <a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>, element2: <a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Appends an HTML element as a child to another HTML element.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cls</code></strong></dt>
+<dd>The class itself (HTMLElement).</dd>
+</dl>
+<p>element ('HTMLElement'): The parent HTML element to which
+the child element will be appended.
+element2 ('HTMLElement'): The child HTML element to append.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the child element was successfully appended, False otherwise.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def append(cls, element: &#39;HTMLElement&#39;, element2: &#39;HTMLElement&#39;)-&gt;None:
+    &#34;&#34;&#34;
+Appends an HTML element as a child to another HTML element.
+
+Args:
+    cls: The class itself (HTMLElement).
+    element (&#39;HTMLElement&#39;): The parent HTML element to which
+    the child element will be appended.
+    element2 (&#39;HTMLElement&#39;): The child HTML element to append.
+
+Returns:
+    bool: True if the child element was successfully appended, False otherwise.
+&#34;&#34;&#34;
+    if not element.children:
+        element.children.append(element2)
+        return
+    if not HTMLElement.is_id_duplication(element.attributes, element.children):
+        element.children.append(element2)</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.find_elements_by_attr"><code class="name flex">
+<span>def <span class="ident">find_elements_by_attr</span></span>(<span>element: <a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>, attr: str, attr_value: str) ‑> List[<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Finds HTML elements with the specified attribute and value.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>element ('HTMLElement'): The HTML element to start the search from.</dt>
+<dt><strong><code>attr</code></strong> :&ensp;<code>str</code></dt>
+<dd>The attribute to search for.</dd>
+<dt><strong><code>attr_value</code></strong> :&ensp;<code>str</code></dt>
+<dd>The value of the attribute to search for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List['HTMLElement']: A list of HTML elements with the specified attribute and value.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def find_elements_by_attr(cls,element: &#39;HTMLElement&#39;,
+                           attr: str,attr_value: str
+                           ) -&gt; List[&#39;HTMLElement&#39;]:
+    &#34;&#34;&#34;
+Finds HTML elements with the specified attribute and value.
+
+Args:
+    element (&#39;HTMLElement&#39;): The HTML element to start the search from.
+    attr (str): The attribute to search for.
+    attr_value (str): The value of the attribute to search for.
+
+Returns:
+    List[&#39;HTMLElement&#39;]: A list of HTML elements with the specified attribute and value.
+&#34;&#34;&#34;
+    elements: List[&#39;HTMLElement&#39;] = []
+    for key, value in element.attributes.items():
+        if key == attr and attr_value == value:
+            elements.append(element)
+    if element.children:
+        for child in element.children:
+            elements.extend(child.find_elements_by_attr(child, attr, attr_value))
+    return elements</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.find_elements_by_tag"><code class="name flex">
+<span>def <span class="ident">find_elements_by_tag</span></span>(<span>element: <a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>, tag_name: str) ‑> List[<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Finds HTML elements with the specified tag name starting from the given element.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>element ('HTMLElement'): The HTML element to start the search from.</dt>
+<dt><strong><code>tag_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The tag name to search for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List['HTMLElement']: A list of HTML elements with the specified tag name.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def find_elements_by_tag(cls,element: &#39;HTMLElement&#39;, tag_name: str) -&gt; List[&#39;HTMLElement&#39;]:
+    &#34;&#34;&#34;
+Finds HTML elements with the specified tag name starting from the given element.
+
+Args:
+    element (&#39;HTMLElement&#39;): The HTML element to start the search from.
+    tag_name (str): The tag name to search for.
+
+Returns:
+    List[&#39;HTMLElement&#39;]: A list of HTML elements with the specified tag name.
+&#34;&#34;&#34;
+    elements: List[&#39;HTMLElement&#39;] = []
+    if HTMLElement.validate_name(tag_name) and element.name == tag_name:
+        elements.append(element)
+    if element.children:
+        for child in element.children:
+            elements.extend(child.find_elements_by_tag(child, tag_name))
+    return elements</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.is_id_duplication"><code class="name flex">
+<span>def <span class="ident">is_id_duplication</span></span>(<span>attributes: Dict[str, str], children: List[ForwardRef('<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>')] = None) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks for duplication of the 'id' attribute among HTML element instances and children.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>attributes</code></strong> :&ensp;<code>Dict[str, str]</code></dt>
+<dd>The attributes of the HTML element to check.</dd>
+</dl>
+<p>children (List['HTMLElement'], optional): The list of children HTML
+elements to check. Default is None.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the 'id' attribute is duplicated, False otherwise.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="html_element.DuplicateIDError" href="#html_element.DuplicateIDError">DuplicateIDError</a></code></dt>
+<dd>If the 'id' attribute is found to be duplicated.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def is_id_duplication(attributes: Dict[str,str], children: List[&#39;HTMLElement&#39;]=None) -&gt; bool:
+    &#34;&#34;&#34;
+Checks for duplication of the &#39;id&#39; attribute among HTML element instances and children.
+
+Args:
+    attributes (Dict[str, str]): The attributes of the HTML element to check.
+    children (List[&#39;HTMLElement&#39;], optional): The list of children HTML
+    elements to check. Default is None.
+
+Returns:
+    bool: True if the &#39;id&#39; attribute is duplicated, False otherwise.
+
+Raises:
+    DuplicateIDError: If the &#39;id&#39; attribute is found to be duplicated.
+&#34;&#34;&#34;
+    existing_id = attributes[&#34;id&#34;]
+    if existing_id in HTMLElement.unique_ids:
+        raise DuplicateIDError(f&#34;ID &#39;{existing_id}&#39; is already exists&#34;)
+    if children:
+        for child in children:
+            if child.attributes.get(&#34;id&#34;) in HTMLElement.unique_ids:
+                raise DuplicateIDError(f&#34;ID &#39;{existing_id}&#39; is already exists&#34;)
+    return False</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>element: <a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>, indent_level: int = 0) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Renders the HTML representation of the given HTML element and its children.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cls</code></strong></dt>
+<dd>The class itself (HTMLElement).</dd>
+<dt>element ('HTMLElement'): The HTML element to render.</dt>
+<dt><strong><code>indent_level</code></strong> :&ensp;<code>int</code></dt>
+<dd>The indentation level for formatting the output.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def render(cls, element: &#39;HTMLElement&#39;, indent_level: int=0) -&gt; str:
+    &#34;&#34;&#34;
+Renders the HTML representation of the given HTML element and its children.
+
+Args:
+    cls: The class itself (HTMLElement).
+    element (&#39;HTMLElement&#39;): The HTML element to render.
+    indent_level (int): The indentation level for formatting the output.
+
+Returns:
+    None
+&#34;&#34;&#34;
+    result: str = &#34;&#34;
+    indent = &#39;\t&#39; * indent_level
+    opening_tag = f&#39;&lt;{element.name}&#39;
+    for key, value in element.attributes.items():
+        opening_tag += f&#39; {key}=&#34;{value}&#34;&#39;
+    opening_tag += &#39;&gt;\n&#39;
+    result+=f&#39;{indent}{opening_tag}\t\t{element.value}\n&#39;
+    if element.children:
+        for child in element.children:
+            result+=cls.render(child, indent_level + 1)
+    closing_tag = f&#39;{indent}&lt;/{element.name}&gt;&#39;
+    result+=closing_tag + &#39;\n&#39;
+    return result</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.render_to_html_file"><code class="name flex">
+<span>def <span class="ident">render_to_html_file</span></span>(<span>element: <a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Renders the given HTML element and its children to an HTML file.</p>
+<h2 id="args">Args</h2>
+<p>element ('HTMLElement'): The root HTML element to render.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def render_to_html_file(cls, element: &#39;HTMLElement&#39;) -&gt; None:
+    &#34;&#34;&#34;
+Renders the given HTML element and its children to an HTML file.
+
+Args:
+    element (&#39;HTMLElement&#39;): The root HTML element to render.
+
+Returns:
+    None
+&#34;&#34;&#34;
+    with open(&#34;output.html&#34;, &#39;w&#39;,encoding=&#39;utf-8&#39;) as html_file:
+        html_file.write(&#34;&lt;!DOCTYPE html&gt;\n&#34;)
+        html_file.write(cls.render(element))</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.validate_attributes"><code class="name flex">
+<span>def <span class="ident">validate_attributes</span></span>(<span>attributes: Dict[str, str]) ‑> Dict[str, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validates the given HTML element attributes.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>attributes</code></strong> :&ensp;<code>Dict[str, str]</code></dt>
+<dd>The attributes to validate.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, str]</code></dt>
+<dd>The validated attributes.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>TypeError</code></dt>
+<dd>If the attributes are not of the correct type.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def validate_attributes(attributes: Dict[str, str]) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;
+Validates the given HTML element attributes.
+
+Args:
+    attributes (Dict[str, str]): The attributes to validate.
+
+Returns:
+    Dict[str, str]: The validated attributes.
+
+Raises:
+    TypeError: If the attributes are not of the correct type.
+&#34;&#34;&#34;
+    if not isinstance(attributes, dict):
+        raise TypeError(&#34;attributes must be a dictionary&#34;)
+    if not HTMLElement.is_id_duplication(attributes):
+        return attributes
+    return attributes</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.validate_name"><code class="name flex">
+<span>def <span class="ident">validate_name</span></span>(<span>name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validates the given HTML element name.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the HTML element to validate.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The validated HTML element name.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="html_element.InvalidElementName" href="#html_element.InvalidElementName">InvalidElementName</a></code></dt>
+<dd>If the name is not a valid HTML element name.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def validate_name(name: str) -&gt; str:
+    &#34;&#34;&#34;
+Validates the given HTML element name.
+
+Args:
+    name (str): The name of the HTML element to validate.
+
+Returns:
+    str: The validated HTML element name.
+
+Raises:
+    InvalidElementName: If the name is not a valid HTML element name.
+&#34;&#34;&#34;
+    valid_tags: List[str] = [&#34;div&#34;, &#34;p&#34;, &#34;span&#34;, &#34;h1&#34;, &#34;h2&#34;, &#34;h3&#34;, &#34;h4&#34;, &#34;h5&#34;]
+    if name.lower() not in valid_tags:
+        raise InvalidElementName(f&#34;Invalid HTML element name: {name}&#34;)
+    return name.lower()</code></pre>
+</details>
+</dd>
+<dt id="html_element.HTMLElement.validate_value"><code class="name flex">
+<span>def <span class="ident">validate_value</span></span>(<span>value: Union[ForwardRef('<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>'), Iterable]) ‑> Union[<a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a>, Iterable]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validates the given HTML element value.</p>
+<h2 id="args">Args</h2>
+<p>value (Union['HTMLElement'Iterable]): The value to validate.</p>
+<h2 id="returns">Returns</h2>
+<p>Union['HTMLElement'Iterable]: The validated value.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>TypeError</code></dt>
+<dd>If the value is not of the correct type.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def validate_value(value: Union[&#39;HTMLElement&#39;,
+                                 Iterable]
+                                 ) -&gt; Union[&#39;HTMLElement&#39;, Iterable]:
+    &#34;&#34;&#34;
+Validates the given HTML element value.
+
+Args:
+    value (Union[&#39;HTMLElement&#39;Iterable]): The value to validate.
+
+Returns:
+    Union[&#39;HTMLElement&#39;Iterable]: The validated value.
+
+Raises:
+    TypeError: If the value is not of the correct type.
+&#34;&#34;&#34;
+    if not isinstance(value, (HTMLElement,Iterable)):
+        raise TypeError(&#34;Invalid value type&#34;)
+    if isinstance(value,str):
+        return value
+    if isinstance(value,Iterable):
+        for item in value:
+            if not isinstance(item, HTMLElement):
+                raise TypeError(&#34;Invalid value type in the list. Must be HTML element.&#34;)
+    return value</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="html_element.InvalidElementName"><code class="flex name class">
+<span>class <span class="ident">InvalidElementName</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised when an invalid HTML element name is encountered.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InvalidElementName(Exception):
+    &#34;&#34;&#34;
+    Exception raised when an invalid HTML element name is encountered.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="html_element.DuplicateIDError" href="#html_element.DuplicateIDError">DuplicateIDError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="html_element.HTMLElement" href="#html_element.HTMLElement">HTMLElement</a></code></h4>
+<ul class="">
+<li><code><a title="html_element.HTMLElement.append" href="#html_element.HTMLElement.append">append</a></code></li>
+<li><code><a title="html_element.HTMLElement.find_elements_by_attr" href="#html_element.HTMLElement.find_elements_by_attr">find_elements_by_attr</a></code></li>
+<li><code><a title="html_element.HTMLElement.find_elements_by_tag" href="#html_element.HTMLElement.find_elements_by_tag">find_elements_by_tag</a></code></li>
+<li><code><a title="html_element.HTMLElement.is_id_duplication" href="#html_element.HTMLElement.is_id_duplication">is_id_duplication</a></code></li>
+<li><code><a title="html_element.HTMLElement.render" href="#html_element.HTMLElement.render">render</a></code></li>
+<li><code><a title="html_element.HTMLElement.render_to_html_file" href="#html_element.HTMLElement.render_to_html_file">render_to_html_file</a></code></li>
+<li><code><a title="html_element.HTMLElement.unique_ids" href="#html_element.HTMLElement.unique_ids">unique_ids</a></code></li>
+<li><code><a title="html_element.HTMLElement.validate_attributes" href="#html_element.HTMLElement.validate_attributes">validate_attributes</a></code></li>
+<li><code><a title="html_element.HTMLElement.validate_name" href="#html_element.HTMLElement.validate_name">validate_name</a></code></li>
+<li><code><a title="html_element.HTMLElement.validate_value" href="#html_element.HTMLElement.validate_value">validate_value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="html_element.InvalidElementName" href="#html_element.InvalidElementName">InvalidElementName</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
