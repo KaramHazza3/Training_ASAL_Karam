@@ -2,8 +2,8 @@ from html_element import HTMLElement, DuplicateIDError, InvalidElementName
 
 def main():
     try:
-        div1 = HTMLElement("div", "Content", {"id": "unique_id1", "name":"karam"})
-        div2 = HTMLElement("div", "Content22", {"id": "unique_id2"}) 
+        div1 = HTMLElement("div", [ HTMLElement("p", "mhmmad",{"id": "unique_id5"}), HTMLElement("p", "mhmmad",{"id": "unique_id6"}) ], {"id": "unique_id1", "name":"karam"})
+        div2 = HTMLElement("div", [ HTMLElement("p", "ahhh",{"id": "unique_id12"}), HTMLElement("p", "ahh",{"id": "unique_id13"}) ], {"id": "unique_id2"}) 
         div3 = HTMLElement("div", "Content33", {"id": "unique_id3"}) 
         p = HTMLElement("p", "Hello world!", {"id": "unique_id4", "name":"karam"}) 
         HTMLElement.append(div2, p)

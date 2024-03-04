@@ -3,6 +3,12 @@ import os
 from html_element import HTMLElement, InvalidElementName, DuplicateIDError
 from html_element_samples import div1,div2,div3,p
 
+@pytest.fixture
+def expected_output():
+    return ("<div id=\"unique_id2\">\n"
+        "\tContent22\n"
+        "</div>\n")
+
 
 def test_html_element_init():
     assert div1.name == "div"
@@ -14,10 +20,6 @@ def test_html_element_init_with_invalid_name():
     with pytest.raises(InvalidElementName):
          HTMLElement("ahmad", "content", {"id": "my_div"})
 
-def test_html_element_init_with_same_id():
-    with pytest.raises(DuplicateIDError):
-        HTMLElement("div", "content", {"id": "unique_id1"})
-
 def test_html_element_append():
     assert len(div1.children) == 0
     HTMLElement.append(div1,div2)
@@ -25,20 +27,14 @@ def test_html_element_append():
 
 def test_html_element_append_same_ids():
     with pytest.raises(DuplicateIDError):
-        HTMLElement.append(div2, HTMLElement("div", "content1", {"id": "unique_id1"}))
+        HTMLElement.append(div2, HTMLElement("div", "content1", {"id": "unique_id2"}))
 
-def test_html_element_render_success():
+def test_html_element_render_success(expected_output):
     result = HTMLElement.render(div2)
-    expected_output = ("<div id=\"unique_id2\">\n"
-        "\t\tContent22\n"
-        "</div>\n")
     assert result.strip() == expected_output.strip()
 
-def test_html_element_render_failure():
+def test_html_element_render_failure(expected_output):
     result = HTMLElement.render(div3)
-    expected_output = ("<div id=\"unique_id2\">\n"
-        "\tContent22\n"
-        "</div>\n")
     assert result.strip() != expected_output.strip()
 
 def test_html_element_find_by_valid_attr():
@@ -64,7 +60,8 @@ def test_html_element_find_by_not_exist_tag():
 
 def test_html_element_render_invalid_element_to_html_file():
     with pytest.raises(DuplicateIDError):
-        HTMLElement.render_to_html_file(HTMLElement("div", "Content22", {"id": "unique_id2"}))
+        HTMLElement.append(div2, HTMLElement("div", "Content22", {"id": "unique_id2"}))
+        HTMLElement.render_to_html_file(div2)
     output_file_path = os.path.join(os.getcwd(), 'output.html')
     assert not os.path.exists(output_file_path)
 

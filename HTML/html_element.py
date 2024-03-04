@@ -9,17 +9,36 @@ class HTMLElement:
     Represents an HTML element with a name, value, and attributes.
     This class provides functionality for creating and manipulating HTML elements.
     """
-    unique_ids: set[int] = set()
+    valid_tags: List[str] = ["div", "p", "span", "h1", "h2", "h3", "h4", "h5"]
 
-    def __init__(self, name: str, value: Union['HTMLElement', str,
-                                                List['HTMLElement']], attributes: Dict[str, str]):
-        self.name: str = self.validate_name(name)
-        self.value: Union['HTMLElement', str, List['HTMLElement']] = self.validate_value(value)
-        self.attributes: Dict[str, str] = self.validate_attributes(attributes)
-        self.children: List['HTMLElement'] = []
+    def __init__(self, name: str, value: Union['HTMLElement', Iterable],
+                  attributes: Dict[str, str]):
+        self.unique_ids: set[str] = set()
+        self.name = self.validate_name(name)
+        self.value = self.validate_value(value)
+        self.attributes = self.validate_attributes(attributes)
+        self.children: List['HTMLElement'] = value if isinstance(value, Iterable
+        ) and not isinstance(value,str) else []
+
+        if isinstance(value, HTMLElement):
+            existing_id: str = self.attributes.get("id")
+            if existing_id == value.attributes.get("id"):
+                raise DuplicateIDError(f"ID '{existing_id}' is already exists")
+            self.children.append(value)
+            self.unique_ids.update(value.unique_ids)
+
+        if isinstance(value,Iterable) and not isinstance(value, str):
+            for item in value:
+                existing_id = item.attributes.get("id")
+                if existing_id == self.attributes.get("id"):
+                    raise DuplicateIDError(f"ID '{existing_id}' is already exists")
 
         if "id" in self.attributes:
-            HTMLElement.unique_ids.add(self.attributes["id"])
+            self.unique_ids.add(self.attributes["id"])
+
+        for child in self.children:
+            self.unique_ids.add(child.attributes["id"])
+
 
     @staticmethod
     def validate_name(name: str) -> str:
@@ -35,10 +54,11 @@ class HTMLElement:
     Raises:
         InvalidElementName: If the name is not a valid HTML element name.
     """
-        valid_tags: List[str] = ["div", "p", "span", "h1", "h2", "h3", "h4", "h5"]
-        if name.lower() not in valid_tags:
+        if name.lower() not in HTMLElement.valid_tags:
             raise InvalidElementName(f"Invalid HTML element name: {name}")
         return name.lower()
+
+
     @staticmethod
     def validate_value(value: Union['HTMLElement',
                                      Iterable]
@@ -59,13 +79,17 @@ class HTMLElement:
             raise TypeError("Invalid value type")
         if isinstance(value,str):
             return value
+        if isinstance(value,HTMLElement):
+            return value
         if isinstance(value,Iterable):
             for item in value:
                 if not isinstance(item, HTMLElement):
                     raise TypeError("Invalid value type in the list. Must be HTML element.")
         return value
+
+
     @staticmethod
-    def validate_attributes(attributes: Dict[str, str]) -> Dict[str, str]:
+    def validate_attributes(attributes: Dict[str,str]) -> Dict[str, str]:
         """
     Validates the given HTML element attributes.
 
@@ -80,11 +104,11 @@ class HTMLElement:
     """
         if not isinstance(attributes, dict):
             raise TypeError("attributes must be a dictionary")
-        if not HTMLElement.is_id_duplication(attributes):
-            return attributes
         return attributes
+
+
     @staticmethod
-    def is_id_duplication(attributes: Dict[str,str], children: List['HTMLElement']=None) -> bool:
+    def is_id_duplication(element: 'HTMLElement', element2: 'HTMLElement') -> bool:
         """
     Checks for duplication of the 'id' attribute among HTML element instances and children.
 
@@ -99,16 +123,18 @@ class HTMLElement:
     Raises:
         DuplicateIDError: If the 'id' attribute is found to be duplicated.
     """
-        existing_id = attributes["id"]
-        if existing_id in HTMLElement.unique_ids:
+        existing_id = element.attributes["id"]
+        if existing_id in element2.unique_ids:
             raise DuplicateIDError(f"ID '{existing_id}' is already exists")
-        if children:
-            for child in children:
-                if child.attributes.get("id") in HTMLElement.unique_ids:
+        if element2.children:
+            for child in element2.children:
+                if child.attributes.get("id") in element.unique_ids:
                     raise DuplicateIDError(f"ID '{existing_id}' is already exists")
         return False
+
+
     @classmethod
-    def append(cls, element: 'HTMLElement', element2: 'HTMLElement')->None:
+    def append(cls, parent_element: 'HTMLElement', child_element: 'HTMLElement') -> None:
         """
     Appends an HTML element as a child to another HTML element.
 
@@ -121,37 +147,82 @@ class HTMLElement:
     Returns:
         bool: True if the child element was successfully appended, False otherwise.
     """
-        if not element.children:
-            element.children.append(element2)
-            return
-        if not HTMLElement.is_id_duplication(element.attributes, element.children):
-            element.children.append(element2)
+        if not HTMLElement.is_id_duplication(parent_element,child_element):
+            parent_element.children.append(child_element)
+            parent_element.unique_ids.update(child_element.unique_ids)
+
+
     @classmethod
-    def render(cls, element: 'HTMLElement', indent_level: int=0) -> str:
+    def render(cls, element: 'HTMLElement', indent_level: int=0, space_level: int=1) -> str:
         """
-    Renders the HTML representation of the given HTML element and its children.
+        Renders the HTML representation of the given HTML element and its children.
 
-    Args:
-        cls: The class itself (HTMLElement).
-        element ('HTMLElement'): The HTML element to render.
-        indent_level (int): The indentation level for formatting the output.
+        Args:
+            cls: The class itself (HTMLElement).
+            element ('HTMLElement'): The HTML element to render.
+            indent_level (int): The indentation level for formatting the output.
+            is_first (bool): Indicates if this is the first element.
 
-    Returns:
-        None
-    """
+        Returns:
+            str: The HTML representation of the element and its children.
+        """
         result: str = ""
         indent = '\t' * indent_level
+        space = '\t' * space_level
         opening_tag = f'<{element.name}'
         for key, value in element.attributes.items():
             opening_tag += f' {key}="{value}"'
         opening_tag += '>\n'
-        result+=f'{indent}{opening_tag}\t\t{element.value}\n'
+
+        element_value = "" if isinstance(element.value, Iterable
+                                         ) and not isinstance(element.value,str
+                                                              ) else str(element.value)
+
+        result += f'{indent}{opening_tag}{space}{element_value}\n'
+
         if element.children:
             for child in element.children:
-                result+=cls.render(child, indent_level + 1)
+                result += cls.render(child, indent_level + 1, space_level + 1)
+
         closing_tag = f'{indent}</{element.name}>'
-        result+=closing_tag + '\n'
+        result += closing_tag + '\n'
         return result
+
+
+    def find_elements(self, element: 'HTMLElement', **kwargs) -> List['HTMLElement']:
+        """
+        Finds HTML elements based on the specified criteria.
+
+        Args:
+            element ('HTMLElement'): The HTML element to start the search from.
+            **kwargs: Keyword arguments representing the search criteria. Supported criteria:
+                    - attr (str): The attribute to search for.
+                    - attr_value (str): The value of the attribute to search for.
+                    - tag_name (str): The tag name to search for.
+
+        Returns:
+            List['HTMLElement']: A list of HTML elements that match the search criteria.
+        """
+        elements: List['HTMLElement'] = []
+
+        attr = kwargs.get('attr')
+        attr_value = kwargs.get('attr_value')
+        tag_name = kwargs.get('tag_name')
+
+        if attr and attr_value:
+            for key, value in element.attributes.items():
+                if key == attr and attr_value == value:
+                    elements.append(element)
+
+        elif tag_name and HTMLElement.validate_name(tag_name) and element.name == tag_name:
+            elements.append(element)
+
+        if element.children:
+            for child in element.children:
+                elements.extend(child.find_elements(child,**kwargs))
+        return elements
+
+
     @classmethod
     def find_elements_by_attr(cls,element: 'HTMLElement',
                                attr: str,attr_value: str
@@ -167,14 +238,9 @@ class HTMLElement:
     Returns:
         List['HTMLElement']: A list of HTML elements with the specified attribute and value.
     """
-        elements: List['HTMLElement'] = []
-        for key, value in element.attributes.items():
-            if key == attr and attr_value == value:
-                elements.append(element)
-        if element.children:
-            for child in element.children:
-                elements.extend(child.find_elements_by_attr(child, attr, attr_value))
-        return elements
+        return cls.find_elements(cls, element, attr=attr, attr_value=attr_value)
+
+
     @classmethod
     def find_elements_by_tag(cls,element: 'HTMLElement', tag_name: str) -> List['HTMLElement']:
         """
@@ -187,13 +253,9 @@ class HTMLElement:
     Returns:
         List['HTMLElement']: A list of HTML elements with the specified tag name.
     """
-        elements: List['HTMLElement'] = []
-        if HTMLElement.validate_name(tag_name) and element.name == tag_name:
-            elements.append(element)
-        if element.children:
-            for child in element.children:
-                elements.extend(child.find_elements_by_tag(child, tag_name))
-        return elements
+        return cls.find_elements(cls, element, tag_name=tag_name)
+
+
     @classmethod
     def render_to_html_file(cls, element: 'HTMLElement') -> None:
         """
@@ -208,6 +270,8 @@ class HTMLElement:
         with open("output.html", 'w',encoding='utf-8') as html_file:
             html_file.write("<!DOCTYPE html>\n")
             html_file.write(cls.render(element))
+
+
 class InvalidElementName(Exception):
     """
     Exception raised when an invalid HTML element name is encountered.
