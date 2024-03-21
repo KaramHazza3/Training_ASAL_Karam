@@ -1,0 +1,3 @@
+from .intf.telegram_bot import TelegramBOT
+from Bots.telegrambotimpl.async_telegram_bot import AsyncTelegramBOT
+from Bots.telegrambotimpl.sync_telegram_bot import SyncTelegramBOT
