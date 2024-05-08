@@ -1,0 +1,86 @@
+[
+  {
+    "model": "contractsApp.profile",
+    "pk": 1,
+    "fields": {
+      "username": "testclient",
+      "email": "testclient@mail.com",
+      "password": "password",
+      "first_name": "John",
+      "last_name": "Doe",
+      "profession": "Software Developer",
+      "type": "Client",
+      "balance": 500.00
+    }
+  },
+  {
+    "model": "contractsApp.profile",
+    "pk": 2,
+    "fields": {
+      "username": "client2",
+      "email": "client2@example.com",
+      "password": "password",
+      "first_name": "Mhmmad",
+      "last_name": "Doe",
+      "profession": "Software Engineer",
+      "type": "Client",
+      "balance": 500.00
+    }
+  },
+  {
+    "model": "contractsApp.profile",
+    "pk": 3,
+    "fields": {
+      "username": "client3",
+      "email": "client3@example.com",
+      "password": "password",
+      "first_name": "Ahmad",
+      "last_name": "Doe",
+      "profession": "QA Developer",
+      "type": "Client",
+      "balance": 20.00
+    }
+  },
+  {
+    "model": "contractsApp.profile",
+    "pk": 4,
+    "fields": {
+      "username": "client4",
+      "email": "client4@example.com",
+      "password": "password",
+      "first_name": "Kareem",
+      "last_name": "Doe",
+      "profession": "FrontEnd Developer",
+      "type": "Client",
+      "balance": 500.00
+    }
+  },
+  {
+    "model": "contractsApp.profile",
+    "pk": 5,
+    "fields": {
+      "username": "testcontractor",
+      "email": "contractor1@example.com",
+      "password": "password",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "profession": "Graphic Designer",
+      "type": "Contractor",
+      "balance": 0.00
+    }
+  },
+  {
+    "model": "contractsApp.profile",
+    "pk": 6,
+    "fields": {
+      "username": "contractor2",
+      "email": "contractor2@example.com",
+      "password": "password",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "profession": "Graphic Designer",
+      "type": "Contractor",
+      "balance": 0.00
+    }
+  }
+]

@@ -1,12 +1,16 @@
+from django.db import IntegrityError, OperationalError
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import ProfileSerializer, ContractSerializer, JobSerializer, BalanceDepositSerializer
+from .serializers import (ProfileSerializer, ContractSerializer, JobSerializer,
+                          AmountSerializer, ClientSerializer)
 from .services import *
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
+import asyncio
 
 
 class SignupView(generics.CreateAPIView):
@@ -17,12 +21,17 @@ class SignupView(generics.CreateAPIView):
 class ContractDetailView(generics.RetrieveAPIView):
     serializer_class = ContractSerializer
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Contract.objects.all()
+    queryset = Contract.objects.prefetch_related('client', 'contractor')
     lookup_field = 'id'
 
     def retrieve(self, request, *args, **kwargs):
         user_id = self.request.user.id
-        contract = self.get_object()
+
+        try:
+            contract = self.get_object()
+        except Http404:
+            return Response({'error': 'Contract not found.'}, status=status.HTTP_404_NOT_FOUND)
+
         if contract.client.id != user_id and contract.contractor.id != user_id:
             return Response('Access Denied', status=status.HTTP_403_FORBIDDEN)
         return super().retrieve(self, request, *args, **kwargs)
@@ -38,6 +47,9 @@ class ContractsListView(generics.ListAPIView):
             return filter_contracts_by_status_and_user(self.request.user.id, requested_status)
         except ValueError as e:
             raise ValidationError(str(e))
+        except (IntegrityError, OperationalError) as e:
+            print("Database error occurred", str(e))
+            raise ValidationError("Database error occurred.")
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -78,6 +90,7 @@ class UnPaidJobListView(generics.ListAPIView):
 
 
 class PayForJobView(generics.CreateAPIView):
+    serializer_class = AmountSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     @extend_schema(
@@ -90,12 +103,15 @@ class PayForJobView(generics.CreateAPIView):
         summary="Pay for a contract job"
     )
     def post(self, request, *args, **kwargs):
-        if request.user.user_type == 'Contractor':
+        if request.user.type == Profile.ProfessionChoices.CONTRACTOR:
             return Response({'error': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
 
         job_id = kwargs.get('job_id')
+        user_id = request.user.id
+        amount = Decimal(request.data.get('amount', 0))
         try:
-            message = process_job_payment(request.user.id, job_id)
+            message = process_job_payment(user_id, job_id, amount)
+
             return Response({'message': message}, status=status.HTTP_200_OK)
         except Job.DoesNotExist:
             return Response({'error': 'Job not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -104,7 +120,7 @@ class PayForJobView(generics.CreateAPIView):
 
 
 class BalanceDepositView(generics.CreateAPIView):
-    serializer_class = BalanceDepositSerializer
+    serializer_class = AmountSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -117,17 +133,6 @@ class BalanceDepositView(generics.CreateAPIView):
             return Response({'error': 'Client not found'}, status=status.HTTP_404_NOT_FOUND)
         except ValueError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-def validate_dates(start_date_str, end_date_str):
-    try:
-        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-        if start_date > end_date:
-            raise ValueError("The start date must not be later than the end date.")
-        return start_date, end_date
-    except ValueError as e:
-        raise ValueError(f"Date error: {str(e)}")
 
 
 class BestProfessionView(APIView):
@@ -175,21 +180,15 @@ class BestClientsPaidView(APIView):
         if not start_date_str or not end_date_str:
             return Response({'error': "Both 'start' and 'end' date parameters are required."},
                             status=status.HTTP_400_BAD_REQUEST)
-
         try:
             start_date, end_date = validate_dates(start_date_str, end_date_str)
         except ValueError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         clients = get_best_clients(start_date, end_date, int(request.query_params.get('limit', 2)))
-        serialized_data = [
-            {
-                'id': client['contract__client__id'],
-                'fullName': client['fullName'],
-                'paid': client['total_paid']
-            }
-            for client in clients
-        ]
+
+        serializer = ClientSerializer(clients, many=True)
+        serialized_data = serializer.data
 
         if serialized_data:
             return Response(serialized_data)

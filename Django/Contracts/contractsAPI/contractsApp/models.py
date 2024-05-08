@@ -7,12 +7,9 @@ class Profile(AbstractUser):
         CLIENT = "Client", "Client"
         CONTRACTOR = "Contractor", "Contractor"
 
-    username = models.CharField(max_length=15, unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
     profession = models.CharField(max_length=30)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    user_type = models.CharField(max_length=10, choices=ProfessionChoices)
+    type = models.CharField(max_length=10, choices=ProfessionChoices)
     email = models.EmailField(unique=True)
 
     def __str__(self):

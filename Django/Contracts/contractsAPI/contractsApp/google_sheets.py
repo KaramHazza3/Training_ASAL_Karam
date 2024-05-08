@@ -1,3 +1,4 @@
+from celery import shared_task
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from django.conf import settings
@@ -12,6 +13,7 @@ def get_service():
     return service
 
 
+@shared_task
 def append_row(values):
     service = get_service()
     body = {
