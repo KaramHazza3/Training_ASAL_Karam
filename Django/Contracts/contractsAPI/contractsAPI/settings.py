@@ -11,6 +11,17 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+REQUIRED_ENV_VARS = ['GOOGLE_SHEET_API_CREDENTIALS', 'GOOGLE_SHEET_ID', 'SECRET_KEY']
+
+missing_env_vars = [var for var in REQUIRED_ENV_VARS if var not in os.environ]
+
+if missing_env_vars:
+    raise EnvironmentError(f"The following required environment variables are missing: {', '.join(missing_env_vars)}")
 
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
@@ -22,7 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@kdw1&$!fc(a%l%)c1&pfe$$ma4#$%*grz2ney_)$$oe^n=s3^'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,8 +41,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'contractsApp.Profile'
-GOOGLE_SHEET_API_CREDENTIALS = 'C:\\Users\\Tmra\\Desktop\\contracts-api-421622-a60b16992100.json'
-GOOGLE_SHEET_ID = '1MYCrS3d9xwhKSXGzsPB7Gy8rlzIo7w0FIQSjY60OfTA'
+GOOGLE_SHEET_API_CREDENTIALS = os.getenv('GOOGLE_SHEET_API_CREDENTIALS')
+GOOGLE_SHEET_ID = os.getenv('GOOGLE_SHEET_ID')
 
 # Application definition
 

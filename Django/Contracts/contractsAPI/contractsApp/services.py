@@ -23,19 +23,10 @@ class FailureMessage(Enum):
     LESSER_AMOUNT_THAN_PRICE = "The requested amount to pay is lesser than the job price"
 
 
-def get_job(user_id, job_id):
-    return Job.objects.select_for_update().select_related('contract').get(pk=job_id, contract__client__id=user_id)
-
-
-def save_balances(client, contractor):
-    client.save()
-    contractor.save()
-
-
 @transaction.atomic
 def process_job_payment(user_id, job_id, amount_to_pay):
 
-    job = get_job(user_id, job_id)
+    job = Job.objects.select_for_update().select_related('contract').get(pk=job_id, contract__client__id=user_id)
     if amount_to_pay < job.price:
         raise ValueError(FailureMessage.LESSER_AMOUNT_THAN_PRICE)
     if job.paid or job.contract.status != Contract.StatusChoices.IN_PROGRESS:
@@ -49,7 +40,8 @@ def process_job_payment(user_id, job_id, amount_to_pay):
     # Process the payment
     client.balance = F('balance') - amount_to_pay
     contractor.balance = F('balance') + amount_to_pay
-    save_balances(client, contractor)
+    client.save()
+    contractor.save()
 
     # Mark job as paid
     job.paid = True
