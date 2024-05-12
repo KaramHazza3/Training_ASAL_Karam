@@ -1,0 +1,91 @@
+[
+  {
+    "model": "contractsApp.job",
+    "pk": 1,
+    "fields": {
+      "description": "Description for job 1",
+      "price": 100.00,
+      "contract": 1
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 2,
+    "fields": {
+      "description": "Description for job 2",
+      "price": 150.00,
+      "contract": 1
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 3,
+    "fields": {
+      "description": "Description for job 3",
+      "price": 80.00,
+      "contract": 2
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 4,
+    "fields": {
+      "description": "Description for job 4",
+      "price": 90.00,
+      "contract": 2
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 5,
+    "fields": {
+      "description": "Description for job 5",
+      "price": 60.00,
+      "contract": 3
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 6,
+    "fields": {
+      "description": "Description for job 6",
+      "price": 100.00,
+      "paid": true,
+      "payment_date": "2024-05-08",
+      "contract": 1
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 7,
+    "fields": {
+      "description": "Description for job 7",
+      "price": 100.00,
+      "paid": true,
+      "payment_date": "2024-05-04",
+      "contract": 1
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 8,
+    "fields": {
+      "description": "Description for job 8",
+      "price": 100.00,
+      "paid": true,
+      "payment_date": "2024-05-04",
+      "contract": 2
+    }
+  },
+  {
+    "model": "contractsApp.job",
+    "pk": 9,
+    "fields": {
+      "description": "Description for job 9",
+      "price": 100.00,
+      "paid": true,
+      "payment_date": "2024-05-08",
+      "contract": 4
+    }
+  }
+]

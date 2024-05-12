@@ -1,0 +1,42 @@
+[
+  {
+    "model": "contractsApp.contract",
+    "pk": 1,
+    "fields": {
+      "terms": "Terms for contract 1",
+      "status": "in_progress",
+      "client": 1,
+      "contractor": 5
+    }
+  },
+  {
+    "model": "contractsApp.contract",
+    "pk": 2,
+    "fields": {
+      "terms": "Terms for contract 2",
+      "status": "in_progress",
+      "client": 2,
+      "contractor": 6
+    }
+  },
+  {
+    "model": "contractsApp.contract",
+    "pk": 3,
+    "fields": {
+      "terms": "Terms for contract 3",
+      "status": "in_progress",
+      "client": 3,
+      "contractor": 6
+    }
+  },
+  {
+    "model": "contractsApp.contract",
+    "pk": 4,
+    "fields": {
+      "terms": "Terms for contract 4",
+      "status": "in_progress",
+      "client": 4,
+      "contractor": 6
+    }
+  }
+]
