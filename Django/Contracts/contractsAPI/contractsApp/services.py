@@ -36,8 +36,6 @@ def process_job_payment(user_id, job_id, amount_to_pay):
 
     if remaining_amount <= 0:
         job.paid = True
-        job.contract.status = Contract.StatusChoices.TERMINATED
-        job.contract.save()
 
     client.balance = F('balance') - amount_to_pay
     contractor.balance = F('balance') + amount_to_pay
