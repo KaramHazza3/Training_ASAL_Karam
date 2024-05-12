@@ -16,14 +16,14 @@ import os
 
 load_dotenv()
 
-REQUIRED_ENV_VARS = ['GOOGLE_SHEET_API_CREDENTIALS', 'GOOGLE_SHEET_ID', 'SECRET_KEY']
+REQUIRED_ENV_VARS = ['GOOGLE_SHEET_API_CREDENTIALS', 'GOOGLE_SHEET_ID', 'SECRET_KEY', 'CELERY_BROKER_URL']
 
 missing_env_vars = [var for var in REQUIRED_ENV_VARS if var not in os.environ]
 
 if missing_env_vars:
     raise EnvironmentError(f"The following required environment variables are missing: {', '.join(missing_env_vars)}")
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

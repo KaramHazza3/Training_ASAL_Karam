@@ -10,7 +10,6 @@ from .serializers import (ProfileSerializer, ContractSerializer, JobSerializer,
                           AmountSerializer, ClientSerializer)
 from .services import *
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-import asyncio
 
 
 class SignupView(generics.CreateAPIView):

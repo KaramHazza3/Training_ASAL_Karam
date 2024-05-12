@@ -1,60 +1,56 @@
 from datetime import datetime
 from decimal import Decimal
 
-from celery import shared_task
-from django.db.models import Sum, Q, Value, F
+from django.db.models import Sum, Q, Value, F, Min
 from django.db.models.functions import Concat
 from django.db import transaction
-from enum import Enum
-from .models import Profile, Job, Contract
+from .models import Profile, Job, Contract, Payment
 from .google_sheets import append_row
-
-
-class SuccessMessage(Enum):
-    PAYMENT_SUCCESSFUL = "Payment successful"
-    DEPOSIT_SUCCESSFUL = "Deposit successful"
-
-
-class FailureMessage(Enum):
-    INSUFFICIENT_BALANCE = "Insufficient balance"
-    ALREADY_PAID_OR_CONTRACT_NOT_IN_PROGRESS = "Job already paid or contract not in progress"
-    INVALID_AMOUNT_VALUE = "Invalid amount value"
-    DEPOSIT_LIMIT_EXCEEDS = "Deposit amount exceeds 25% of total jobs to pay"
-    LESSER_AMOUNT_THAN_PRICE = "The requested amount to pay is lesser than the job price"
+from .constants import FailureMessage, SuccessMessage
 
 
 @transaction.atomic
 def process_job_payment(user_id, job_id, amount_to_pay):
-
     job = Job.objects.select_for_update().select_related('contract').get(pk=job_id, contract__client__id=user_id)
-    if amount_to_pay < job.price:
-        raise ValueError(FailureMessage.LESSER_AMOUNT_THAN_PRICE)
+
     if job.paid or job.contract.status != Contract.StatusChoices.IN_PROGRESS:
-        raise ValueError(FailureMessage.ALREADY_PAID_OR_CONTRACT_NOT_IN_PROGRESS.value)
+        raise ValueError("Job already paid or contract not in progress.")
 
     client = job.contract.client
     contractor = job.contract.contractor
     if client.balance < amount_to_pay:
-        raise ValueError(FailureMessage.INSUFFICIENT_BALANCE.value)
+        raise ValueError("Insufficient balance.")
 
-    # Process the payment
+    latest_payment = Payment.objects.filter(job=job).aggregate(latest_remaining=Min('remaining_amount'))['latest_remaining']
+    remaining_amount = latest_payment if latest_payment is not None else job.price
+    remaining_amount -= amount_to_pay
+
+    payment_row = Payment(
+        paid_amount=amount_to_pay,
+        remaining_amount=remaining_amount,
+        client=client,
+        contractor=contractor,
+        job=job,
+        payment_date=datetime.now()
+    )
+
+    if remaining_amount <= 0:
+        job.paid = True
+        job.contract.status = Contract.StatusChoices.TERMINATED
+        job.contract.save()
+
     client.balance = F('balance') - amount_to_pay
     contractor.balance = F('balance') + amount_to_pay
+
     client.save()
     contractor.save()
 
-    # Mark job as paid
-    job.paid = True
+    payment_row.save()
+
     job.payment_date = datetime.now()
     job.save()
 
-    # Update the contract status
-    job.contract.status = Contract.StatusChoices.TERMINATED
-    job.contract.save()
-
-    # Log the transaction
     append_row.delay([str(datetime.now()), client.username, str(amount_to_pay), "Payment"])
-
     return SuccessMessage.PAYMENT_SUCCESSFUL.value
 
 

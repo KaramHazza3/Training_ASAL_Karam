@@ -32,5 +32,14 @@ class Job(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     paid = models.BooleanField(default=False)
-    payment_date = models.DateField(null=True, blank=True)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='jobs')
+    payment_date = models.DateField(null=True, blank=True)
+
+
+class Payment(models.Model):
+    client = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='client_job')
+    contractor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='contractor_job')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job_payment')
+    paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    payment_date = models.DateField(null=True, blank=True)
