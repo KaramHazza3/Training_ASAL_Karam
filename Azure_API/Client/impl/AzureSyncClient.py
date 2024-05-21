@@ -7,8 +7,8 @@ from Settings import response, SuccessResponse, ErrorResponse
 
 class AzureSyncClient(IAzureClient):
 
-    def make_request(self, method: str, url: str, content_type='application/json', **kwargs
-                     ) -> response:
+    def _make_request(self, method: str, url: str, content_type='application/json', **kwargs
+                      ) -> response:
         """
         Make an asynchronous HTTP request.
 
@@ -49,38 +49,43 @@ class AzureSyncClient(IAzureClient):
                 }
             }
         }
-        return self.make_request("POST", url=endpoint, json=data)
+        return self._make_request("POST", url=endpoint, json=data)
 
     def list_projects(self):
 
         endpoint = f'{self.azure_settings.organization_name}/_apis/projects?{self.azure_settings.api_version}'
-        return self.make_request("GET", url=endpoint)
+        return self._make_request("GET", url=endpoint)
 
     def get_project(self, project_identifier: str) -> response:
 
-        endpoint = f'{self.azure_settings.organization_name}/_apis/projects/{project_identifier}?{self.azure_settings.api_version}'
-        return self.make_request("GET", url=endpoint)
+        endpoint = (f'{self.azure_settings.organization_name}/_apis/projects/{project_identifier}'
+                    f'?{self.azure_settings.api_version}')
+        return self._make_request("GET", url=endpoint)
 
     def list_work_items(self, project_name: str) -> response:
 
-        endpoint = f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/wiql?{self.azure_settings.api_version}'
+        endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/wiql'
+                    f'?{self.azure_settings.api_version}')
         data: Dict = {
             "query": "SELECT [Id] from WorkItems"
         }
-        return self.make_request("POST", url=endpoint, json=data)
+        return self._make_request("POST", url=endpoint, json=data)
 
     def get_work_item(self, project_name: str, work_item_id: str) -> response:
 
-        endpoint = f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}?{self.azure_settings.api_version}'
-        return self.make_request("GET", url=endpoint)
+        endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}'
+                    f'?{self.azure_settings.api_version}')
+        return self._make_request("GET", url=endpoint)
 
     def delete_work_item(self, project_name: str, work_item_id: str) -> response:
 
-        endpoint = f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}?{self.azure_settings.api_version}'
-        return self.make_request("DELETE", endpoint)
+        endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}'
+                    f'?{self.azure_settings.api_version}')
+        return self._make_request("DELETE", endpoint)
 
     def create_work_item(self, project_name: str, work_item_type: str, work_item_title: str) -> response:
-        endpoint = f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/${work_item_type}?{self.azure_settings.api_version}'
+        endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/${work_item_type}'
+                    f'?{self.azure_settings.api_version}')
         data: Iterable[Dict] = [
             {
                 "op": "add",
@@ -93,15 +98,14 @@ class AzureSyncClient(IAzureClient):
                 "value": "This is a new work item"
             }
         ]
-        headers = self.azure_settings.get_header("application/json-patch+json")
-        return self.make_request("POST", endpoint, json=data, headers=headers)
+        return self._make_request("POST", endpoint, content_type='application/json-patch+json', json=data)
 
     def update_work_item_title(self, project_name: str, work_item_id: str, title: str) -> response:
-        endpoint = f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}?{self.azure_settings.api_version}'
+        endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}'
+                    f'?{self.azure_settings.api_version}')
         data: Iterable[Dict] = [{
             "op": "add",
             "path": "/fields/System.Title",
             "value": title
         }]
-        headers = self.azure_settings.get_header("application/json-patch+json")
-        return self.make_request("patch", endpoint, json=data, headers=headers)
+        return self._make_request("patch", endpoint, content_type='application/json-patch+json', json=data)

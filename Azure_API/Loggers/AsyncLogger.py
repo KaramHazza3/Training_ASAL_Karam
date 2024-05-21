@@ -46,5 +46,3 @@ class AsyncLogger(ILogger):
             print(f"Error sending response message: TimeoutException - {e}")
 
         print(f"Received response with status {response.status_code} from {response.url}")
-
-

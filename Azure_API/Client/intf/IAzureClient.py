@@ -17,8 +17,8 @@ class IAzureClient(ABC):
         }
 
     @abstractmethod
-    def make_request(self, method: str, url: str, content_type='application/json', **kwargs
-                     ) -> response:
+    def _make_request(self, method: str, url: str, content_type='application/json', **kwargs
+                      ) -> response:
         pass
 
     @abstractmethod

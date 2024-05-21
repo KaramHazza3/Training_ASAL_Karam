@@ -7,8 +7,8 @@ from Settings import response, SuccessResponse, ErrorResponse
 
 class AzureAsyncClient(IAzureClient):
 
-    async def make_request(self, method: str, url: str, content_type='application/json', **kwargs
-                           ) -> response:
+    async def _make_request(self, method: str, url: str, content_type='application/json', **kwargs
+                            ) -> response:
         """
         Make an asynchronous HTTP request.
 
@@ -49,18 +49,18 @@ class AzureAsyncClient(IAzureClient):
                 }
             }
         }
-        return await self.make_request("POST", url=endpoint, json=data)
+        return await self._make_request("POST", url=endpoint, json=data)
 
     async def list_projects(self):
 
         endpoint = f'{self.azure_settings.organization_name}/_apis/projects?{self.azure_settings.api_version}'
-        return await self.make_request("GET", url=endpoint)
+        return await self._make_request("GET", url=endpoint)
 
     async def get_project(self, project_identifier: str) -> response:
 
         endpoint = (f'{self.azure_settings.organization_name}/_apis/projects/{project_identifier}?'
                     f'{self.azure_settings.api_version}')
-        return await self.make_request("GET", url=endpoint)
+        return await self._make_request("GET", url=endpoint)
 
     async def list_work_items(self, project_name: str) -> response:
 
@@ -68,19 +68,19 @@ class AzureAsyncClient(IAzureClient):
         data: Dict = {
             "query": "SELECT [Id] from WorkItems"
         }
-        return await self.make_request("POST", url=endpoint, json=data)
+        return await self._make_request("POST", url=endpoint, json=data)
 
     async def get_work_item(self, project_name: str, work_item_id: str) -> response:
 
         endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}'
                     f'?{self.azure_settings.api_version}')
-        return await self.make_request("GET", url=endpoint)
+        return await self._make_request("GET", url=endpoint)
 
     async def delete_work_item(self, project_name: str, work_item_id: str) -> response:
 
         endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}'
                     f'?{self.azure_settings.api_version}')
-        return await self.make_request("DELETE", endpoint)
+        return await self._make_request("DELETE", endpoint)
 
     async def create_work_item(self, project_name: str, work_item_type: str, work_item_title: str) -> response:
         endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/${work_item_type}'
@@ -97,8 +97,7 @@ class AzureAsyncClient(IAzureClient):
                 "value": "This is a new work item"
             }
         ]
-        headers = self.azure_settings.get_header("application/json-patch+json")
-        return await self.make_request("POST", endpoint, json=data, headers=headers)
+        return await self._make_request("POST", endpoint, content_type= 'application/json-patch+json', json=data)
 
     async def update_work_item_title(self, project_name: str, work_item_id: str, title: str) -> response:
         endpoint = (f'{self.azure_settings.organization_name}/{project_name}/_apis/wit/WorkItems/{work_item_id}'
@@ -108,5 +107,4 @@ class AzureAsyncClient(IAzureClient):
             "path": "/fields/System.Title",
             "value": title
         }]
-        headers = self.azure_settings.get_header("application/json-patch+json")
-        return await self.make_request("patch", endpoint, json=data, headers=headers)
+        return await self._make_request("patch", endpoint, content_type= 'application/json-patch+json', json=data)

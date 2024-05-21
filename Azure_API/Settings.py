@@ -22,19 +22,16 @@ class AzureSettings:
     api_version: str = "api-version=7.0"
     base_url: str = "https://dev.azure.com/"
 
-    def get_header(self, content_type: str = "application/json") -> Dict:
+    def get_header(self) -> Dict:
         """
         Generate headers for API requests.
-
-        Args:
-            content_type (str): Content type for the request (default is "application/json").
 
         Returns:
             dict: Request headers.
         """
         to_encode_token = f":{self.pat}"
         encoded_credentials = base64.b64encode(to_encode_token.encode('ascii')).decode('ascii')
-        return {"Authorization": f"Basic {encoded_credentials}", "Content-Type": content_type}
+        return {"Authorization": f"Basic {encoded_credentials}", "Content-Type": "application/json"}
 
 
 @dataclass
